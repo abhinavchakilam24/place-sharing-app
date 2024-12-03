@@ -33,7 +33,7 @@ const PLACES = [
 const UserPlaces = () => {
     
     const userId = useParams().userId;
-    const loadedPlaces = PLACES.filter(place => place.creator === userId)
+    const loadedPlaces = PLACES.filter(place => place.creator === userId);
     return(
         <PlaceList items={PLACES} />
     );
