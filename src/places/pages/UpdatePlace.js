@@ -5,6 +5,7 @@ import "./PlaceForm.css";
 import Input from "../../shared/components/FormElements/Input";
 import Button from "../../shared/components/FormElements/Button";
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE} from '../../shared/components/util/validators';
+import { useForm } from "../../shared/hooks/form-hook";
 
 const PLACES = [
   {
@@ -38,6 +39,17 @@ const PLACES = [
 const UpdatePlace = (props) => {
   const placeId = useParams().placeId;
 
+  const [formState, inputChangeHandler] = useForm({
+    title: {
+      value: identifiedPlace.title,
+      isValid: true
+    },
+    description: {
+      value: identifiedPlace.value,
+      isValid: true
+    }
+  }, true);
+
   const identifiedPlace = PLACES.find((p) => p.id === placeId);
 
   if (!identifiedPlace) {
@@ -54,23 +66,23 @@ const UpdatePlace = (props) => {
         label="Title"
         element="input"
         type="text"
-        value={identifiedPlace.title}
+        initialValue={formState.inputs.title.value}
         errorText="Please enter a valid title."
         validators={[VALIDATOR_REQUIRE()]}
-        onInput={() => {}}
-        valid = {true}
+        onInput={inputChangeHandler}
+        initialValid = {formState.inputs.title.isValid}
       />
       <Input
         id="description"
         label="Description"
         element="textarea"
-        value={identifiedPlace.description}
+        initialValue={formState.inputs.description.value}
         errorText="Please enter a valid description (at least 5 characters)"
         validators={[VALIDATOR_MINLENGTH(5)]}
-        onInput={() => {}}
-        valid = {true}
+        onInput={inputChangeHandler}
+        initialValid = {formState.inputs.description.isValid}
       />
-      <Button >SUBMIT</Button>
+      <Button type="submit" disabled = {!formState.isValid}>SUBMIT</Button>
     </form>
   );
 };
